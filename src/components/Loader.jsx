@@ -1,78 +1,57 @@
-import React from 'react';
-import styled from 'styled-components';
+import { useState, useEffect } from "react";
 
-const Loader = () => {
+const COOKING_TIPS = [
+  "Chopping vegetables...",
+  "Preheating the oven...",
+  "Seasoning to perfection...",
+  "Simmering the sauce...",
+  "Consulting the recipe book...",
+  "Tasting for flavor...",
+  "Plating the dish...",
+  "Almost ready! 🍽️",
+];
+
+export default function Loader() {
+  const [tipIndex, setTipIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTipIndex((prev) => (prev + 1) % COOKING_TIPS.length);
+    }, 1800);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <StyledWrapper>
-      <div className="loader">
-        <div className="circle" />
-        <div className="circle" />
-        <div className="circle" />
-        <div className="circle" />
+    <div className="flex flex-col items-center justify-center gap-5 py-10 animate-fade-in">
+      {/* Spinner */}
+      <div className="relative w-14 h-14">
+        <div className="absolute inset-0 rounded-full border-4 border-amber-200 dark:border-gray-700" />
+        <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-amber-500 border-r-orange-400 animate-spin" />
+        <span className="absolute inset-0 flex items-center justify-center text-xl">
+          🍳
+        </span>
       </div>
-    </StyledWrapper>
+
+      {/* Rotating tip */}
+      <div className="text-center">
+        <p className="text-sm font-semibold text-amber-700 dark:text-amber-400 animate-pulse-soft transition-all duration-500">
+          {COOKING_TIPS[tipIndex]}
+        </p>
+        <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
+          Our AI chef is crafting your recipe…
+        </p>
+      </div>
+
+      {/* Dot trail */}
+      <div className="flex gap-1.5">
+        {[0, 1, 2].map((i) => (
+          <span
+            key={i}
+            className="w-2 h-2 rounded-full bg-amber-400 dark:bg-amber-600"
+            style={{ animation: `bounceSm 1s ease-in-out ${i * 0.2}s infinite` }}
+          />
+        ))}
+      </div>
+    </div>
   );
 }
-
-const StyledWrapper = styled.div`
-  .loader {
-    --dim: 3rem;
-    width: var(--dim);
-    height: var(--dim);
-    position: relative;
-    animation: spin988 2s linear infinite;
-  }
-
-  .loader .circle {
-    --color: #333;
-    --dim: 1.2rem;
-    width: var(--dim);
-    height: var(--dim);
-    background-color: var(--color);
-    border-radius: 50%;
-    position: absolute;
-  }
-
-  .loader .circle:nth-child(1) {
-    top: 0;
-    left: 0;
-  }
-
-  .loader .circle:nth-child(2) {
-    top: 0;
-    right: 0;
-  }
-
-  .loader .circle:nth-child(3) {
-    bottom: 0;
-    left: 0;
-  }
-
-  .loader .circle:nth-child(4) {
-    bottom: 0;
-    right: 0;
-  }
-
-  @keyframes spin988 {
-    0% {
-      transform: scale(1) rotate(0);
-    }
-
-    20%, 25% {
-      transform: scale(1.3) rotate(90deg);
-    }
-
-    45%, 50% {
-      transform: scale(1) rotate(180deg);
-    }
-
-    70%, 75% {
-      transform: scale(1.3) rotate(270deg);
-    }
-
-    95%, 100% {
-      transform: scale(1) rotate(360deg);
-    }
-  }`;
-
-export default Loader;
