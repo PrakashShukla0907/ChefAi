@@ -14,12 +14,19 @@ export default function MainSection({ darkMode }) {
   const { toasts, addToast, removeToast } = useToast();
 
   const recipeSection = React.useRef(null);
+  const loaderRef = React.useRef(null);
 
   React.useEffect(() => {
     if (recipe !== "" && recipeSection.current !== null) {
       recipeSection.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [recipe]);
+
+  React.useEffect(() => {
+    if (loader && loaderRef.current !== null) {
+      loaderRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [loader]);
 
   async function getRecipe() {
     setRecipe("");
@@ -153,7 +160,11 @@ export default function MainSection({ darkMode }) {
         />
 
         {/* Loader */}
-        {loader && <Loader />}
+        {loader && (
+          <div ref={loaderRef} className="w-full">
+            <Loader />
+          </div>
+        )}
 
         {/* Recipe output */}
         {recipe && (
