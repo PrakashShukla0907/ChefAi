@@ -21,7 +21,15 @@ export default function ClaudeRecipe({ recipe }) {
         h1 { color: #d17557; } h2 { color: #b45a3c; } h3 { color: #92400e; }
         li { margin-bottom: 4px; }
       </style></head>
-      <body>${recipe.replace(/\n/g, "<br/>")}</body></html>
+      <body>
+        ${recipe
+          .replace(/^#### (.*$)/gim, '<h4>$1</h4>')
+          .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+          .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+          .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+          .replace(/^\* (.*$)/gim, '<li>$1</li>')
+          .replace(/\n/g, "<br/>")}
+      </body></html>
     `);
     win.document.close();
     win.print();

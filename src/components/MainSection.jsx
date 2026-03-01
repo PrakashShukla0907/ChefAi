@@ -33,12 +33,8 @@ export default function MainSection({ darkMode }) {
     try {
       const recipeMarkdown = await getRecipeFromMistral(ingredients);
       setRecipe(recipeMarkdown);
-      const titleMatch = recipeMarkdown.match(/^#\s+(.+)/m);
-      const recipeName = titleMatch ? titleMatch[1].trim() : null;
       addToast(
-        recipeName
-          ? `🍽️ ${recipeName} — Bon appétit!`
-          : "🍽️ Recipe generated! Bon appétit!",
+        recipeMarkdown && "🍽️ Recipe generated",
         "success"
       );
     } catch (err) {
